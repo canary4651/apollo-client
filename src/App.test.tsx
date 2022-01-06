@@ -4,6 +4,7 @@ import App from './App';
 
 jest.mock('@apollo/client', () => ({
   gql: jest.fn((x) => x),
+  useApolloClient: jest.fn(),
   useQuery: jest.fn(() => ({
     loading: false,
     error: undefined,

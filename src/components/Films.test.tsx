@@ -1,8 +1,12 @@
-import { render, waitFor } from '@testing-library/react';
-
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
+import { InMemoryCache } from '@apollo/client';
 
 import Films, { GET_FILMS_QUERY } from './Films';
+
+const context = describe;
+
+const cache = new InMemoryCache();
 
 const mocks = [
   {
@@ -15,6 +19,7 @@ const mocks = [
         allFilms: {
           films: [
             {
+              __typename: 'Film',
               id: 'ID-0001',
               episodeID: 4,
               title: 'A New Hope',
@@ -30,21 +35,37 @@ const mocks = [
 ];
 
 describe('Films', () => {
-  function renderFilms() {
-    return render((
-      <MockedProvider mocks={mocks} addTypename={false}>
+  function Component() {
+    return (
+      <MockedProvider mocks={mocks} cache={cache}>
         <Films />
       </MockedProvider>
-    ));
+    );
   }
 
   it('renders a list of films', async () => {
-    const { container } = renderFilms();
+    const { container } = render(<Component />);
 
     expect(container).toHaveTextContent('Loading...');
 
     await waitFor(() => {
       expect(container).toHaveTextContent('A New Hope');
+    });
+  });
+
+  context('when “Modify title” button is clicked', () => {
+    it('changes title of a film', async () => {
+      const { container, getByText } = render(<Component />);
+
+      await waitFor(() => {
+        expect(container).toHaveTextContent('A New Hope');
+      });
+
+      fireEvent.click(getByText('Modify title!'));
+
+      await waitFor(() => {
+        expect(container).toHaveTextContent('A New Hope🌟');
+      });
     });
   });
 });
