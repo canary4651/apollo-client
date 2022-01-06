@@ -292,3 +292,11 @@ touch src/components/Films.test.tsx
 `src/App.test.tsx` 파일 수정.
 
 `src/App.tsx` 파일 수정.
+
+---
+
+# Subscription
+
+```bash
+npm install subscriptions-transport-ws
+```

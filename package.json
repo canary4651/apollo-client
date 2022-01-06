@@ -6,6 +6,7 @@
   "scripts": {
     "start": "parcel index.html --port 8080",
     "build": "parcel build index.html",
+    "dev": "node src/server.mjs",
     "check": "tsc --noEmit",
     "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx .",
     "test": "jest",
@@ -43,8 +44,16 @@
   },
   "dependencies": {
     "@apollo/client": "^3.5.6",
+    "@graphql-tools/schema": "^8.3.1",
+    "apollo-server": "^3.6.1",
+    "apollo-server-core": "^3.6.1",
+    "apollo-server-express": "^3.6.1",
+    "express": "^4.17.2",
     "graphql": "^16.2.0",
+    "graphql-subscriptions": "^2.0.0",
+    "http": "*",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "subscriptions-transport-ws": "^0.11.0"
   }
 }
