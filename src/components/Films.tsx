@@ -1,4 +1,4 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql, useApolloClient, useQuery } from '@apollo/client';
 
 export const GET_FILMS_QUERY = gql`
   query GetAllFilms {
@@ -31,7 +31,21 @@ type AllFilms = {
 }
 
 export default function Films() {
+  const client = useApolloClient();
+
   const { loading, error, data } = useQuery<AllFilms>(GET_FILMS_QUERY);
+
+  const handleClick = (film: Film) => {
+    const { cache } = client;
+    cache.modify({
+      id: cache.identify(film),
+      fields: {
+        title(cachedTitle) {
+          return `${cachedTitle}🌟`;
+        },
+      },
+    });
+  };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -52,6 +66,10 @@ export default function Films() {
           ]
           {' '}
           {film.title}
+          {' '}
+          <button type="button" onClick={() => handleClick(film)}>
+            Modify title!
+          </button>
         </li>
       ))}
     </ul>
